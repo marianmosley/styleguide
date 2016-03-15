@@ -48,9 +48,16 @@ class DateField extends FieldBase {
     this.handleChange(value);
   }
 
+  convertInternationalDate(value) {
+    var parts = value.split('/');
+    return new Date(parts[1]-1, parts[0], parts[2]);
+  }
+
   datePicker() {
+    //Date.parse cannot handle "DD/MM/YYYY"
+    var DateUS = this.props.dateFormat==='DD/MM/YYYY' ? this.convertInternationalDate(this.state.value) : this.state.value;
     return (
-      <DatePicker date={this.state.value ? Moment(Date.parse(this.state.value)) : Moment()}
+      <DatePicker date={this.state.value ? Moment(Date.parse(this.dateUS)) : Moment()}
                   maxDate={this.boundedMaxDate()}
                   minDate={this.boundedMinDate()}
                   onChangeDate={this.handleDate} />
